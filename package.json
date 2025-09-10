@@ -16,7 +16,7 @@
 		"check": "pnpm typecheck && pnpm lint"
 	},
 	"dependencies": {
-		"@samanager/sdk": "0.0.3-beta.3",
+		"@samanager/sdk": "0.0.3",
 		"@vue-dapp/core": "1.5.9",
 		"@vue-dapp/modal": "1.5.9",
 		"@vueuse/core": "^12.4.0",
