@@ -197,11 +197,9 @@ async function onClickIncrement() {
 				// Wait 5 seconds before next poll
 				await new Promise(resolve => setTimeout(resolve, 5000))
 			} catch (pollError) {
-				console.warn(`Poll attempt ${i + 1} failed:`, pollError)
-				if (i === 59) {
-					// Last attempt
-					incrementError.value = 'Failed to get transaction status'
-				}
+				console.error(`Poll attempt ${i + 1} failed:`, pollError)
+				incrementError.value = `Error getting calls status: ${getErrorMessage(pollError)}`
+				break // Stop polling on error and show the error immediately
 			}
 		}
 	} catch (error) {
