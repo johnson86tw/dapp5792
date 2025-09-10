@@ -31,7 +31,7 @@ onMounted(() => {
 		</header>
 		<RouterView />
 	</div>
-	<VueDappModal dark auto-connect />
+	<VueDappModal dark auto-connect auto-connect-browser-wallet-if-solo />
 </template>
 
 <style lang="css" scoped></style>
