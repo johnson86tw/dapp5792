@@ -1,10 +1,15 @@
 <script setup lang="ts">
-import { VueDappModal } from '@vue-dapp/modal'
-import '@vue-dapp/modal/dist/style.css'
 import { announceSAManagerProvider } from '@samanager/sdk'
 import { BrowserWalletConnector, useVueDapp } from '@vue-dapp/core'
+import { VueDappModal } from '@vue-dapp/modal'
+import '@vue-dapp/modal/dist/style.css'
 
 const { connectors, addConnectors } = useVueDapp()
+
+let samanagerOrigin = 'http://localhost:5173'
+if (import.meta.env.PROD) {
+	samanagerOrigin = 'https://testnet.samanager.xyz'
+}
 
 onMounted(() => {
 	if (!connectors.value.find(connector => connector.name === 'BrowserWallet')) {
@@ -13,7 +18,7 @@ onMounted(() => {
 
 	announceSAManagerProvider({
 		debug: true,
-		origin: 'http://localhost:5173',
+		origin: samanagerOrigin,
 	})
 })
 </script>
