@@ -218,8 +218,8 @@ async function onClickIncrement() {
 					break
 				}
 
-				// Wait 5 seconds before next poll
-				await new Promise(resolve => setTimeout(resolve, 5000))
+				// Wait 1 second before next poll
+				await new Promise(resolve => setTimeout(resolve, 1000))
 			} catch (pollError) {
 				console.error(`Poll attempt ${i + 1} failed:`, pollError)
 				incrementError.value = `Error getting calls status: ${getErrorMessage(pollError)}`
