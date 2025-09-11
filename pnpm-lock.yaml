@@ -12,8 +12,8 @@ importers:
   .:
     dependencies:
       '@samanager/sdk':
-        specifier: 0.0.3
-        version: 0.0.3
+        specifier: 0.1.0
+        version: 0.1.0
       '@vue-dapp/core':
         specifier: 1.5.9
         version: 1.5.9(pinia@3.0.3(typescript@5.8.3)(vue@3.5.21(typescript@5.8.3)))(vue@3.5.21(typescript@5.8.3))
@@ -698,8 +698,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@samanager/sdk@0.0.3':
-    resolution: {integrity: sha512-f+1PfDLTYpMx6Zc81tFEVI4CSlOrfTfg2Vn7miktpM+8X9iM5EpEXm6pWBBSx9doe51rUMEugoedMyOAzkc6lA==}
+  '@samanager/sdk@0.1.0':
+    resolution: {integrity: sha512-DaQQx2+ZXKFnwh/TijRMBGBR58l3v/cxYkzqDkXMXEAOcTfKIgorPlYweIk5JsfZ9IHE8xYzdFibjxYrKFKNMg==}
 
   '@scure/base@1.2.6':
     resolution: {integrity: sha512-g/nm5FgUa//MCj1gV09zTJTaM6KBAHqLN907YVQqf7zC49+DcO4B1so4ZX07Ef10Twr6nuqYEH9GEggFXA4Fmg==}
@@ -3428,7 +3428,7 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.50.1':
     optional: true
 
-  '@samanager/sdk@0.0.3':
+  '@samanager/sdk@0.1.0':
     dependencies:
       mitt: 3.0.1
 
