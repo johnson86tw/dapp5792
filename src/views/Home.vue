@@ -5,6 +5,7 @@ import { getErrorMessage } from '@/utils'
 import { EthereumRpcError } from '@samanager/sdk'
 import { useVueDapp } from '@vue-dapp/core'
 import { useVueDappModal } from '@vue-dapp/modal'
+import { pimlico, PimlicoChain } from 'evm-providers'
 import { createPublicClient, createWalletClient, custom, http, parseAbi } from 'viem'
 import { eip5792Actions } from 'viem/experimental'
 
@@ -13,9 +14,34 @@ const { wallet, isConnected, watchWalletChanged, watchDisconnect, disconnect, on
 // Blockchain store for selected network
 const { selectedNetwork } = useBlockchain()
 
-const paymasterUrl = computed(() => {
-	const chainName = selectedNetwork.value.name
-	return `https://api.candide.dev/paymaster/v3/${chainName}/${import.meta.env.VITE_CANDIDE_API_KEY}`
+// Paymaster selection state
+type PaymasterType = 'candide' | 'pimlico'
+const selectedPaymaster = ref<PaymasterType>('pimlico')
+
+// Paymaster configuration
+const paymasterConfig = computed(() => {
+	if (selectedPaymaster.value === 'candide') {
+		const chainName = selectedNetwork.value.name
+		return {
+			type: 'candide' as const,
+			url: `https://api.candide.dev/paymaster/v3/${chainName}/${import.meta.env.VITE_CANDIDE_API_KEY}`,
+			context: {
+				name: 'Candide Paymaster',
+				icon: 'https://paymaster-service.infra.candide.dev/api/files/33beceb9720c7dce313b543d35d689b6c5699545fe0fc0977961aa40d8f90429/6d9ac3ee255853747bc1df4fb7d03204_metadata_default_logo.png',
+				sponsorshipPolicyId: 'f0785f78e6678a99',
+			},
+		}
+	} else {
+		return {
+			type: 'pimlico' as const,
+			url: pimlico(selectedNetwork.value.id as PimlicoChain, import.meta.env.VITE_PIMLICO_API_KEY),
+			context: {
+				name: 'Pimlico Paymaster',
+				icon: 'https://docs.pimlico.io/favicons/favicon.png',
+				sponsorshipPolicyId: 'sp_sour_garia',
+			},
+		}
+	}
 })
 
 // Counter contract setup
@@ -150,6 +176,13 @@ async function onClickIncrement() {
 		}).extend(eip5792Actions())
 
 		// Send increment transaction using writeContracts
+		const capabilities = {
+			paymasterService: {
+				url: paymasterConfig.value.url,
+				context: paymasterConfig.value.context,
+			},
+		}
+
 		const result = await client.writeContracts({
 			account: wallet.address as `0x${string}`,
 			contracts: [
@@ -159,16 +192,7 @@ async function onClickIncrement() {
 					functionName: 'increment',
 				},
 			],
-			capabilities: {
-				paymasterService: {
-					url: paymasterUrl.value,
-					context: {
-						name: 'Candide Paymaster',
-						icon: 'https://paymaster-service.infra.candide.dev/api/files/33beceb9720c7dce313b543d35d689b6c5699545fe0fc0977961aa40d8f90429/6d9ac3ee255853747bc1df4fb7d03204_metadata_default_logo.png',
-						sponsorshipPolicyId: 'f0785f78e6678a99',
-					},
-				},
-			},
+			capabilities,
 		})
 
 		console.log('writeContracts result:', result)
@@ -215,6 +239,21 @@ async function onClickIncrement() {
 	<div class="p-5 flex flex-col gap-5">
 		<NetworkSelector />
 
+		<!-- Paymaster Selector Section -->
+		<div>
+			<h3 class="text-sm font-medium text-gray-700 mb-2">Paymaster</h3>
+			<div class="flex gap-3">
+				<label class="flex items-center cursor-pointer">
+					<input type="radio" value="candide" v-model="selectedPaymaster" class="mr-2" />
+					<span class="text-sm">Candide</span>
+				</label>
+				<label class="flex items-center cursor-pointer">
+					<input type="radio" value="pimlico" v-model="selectedPaymaster" class="mr-2" />
+					<span class="text-sm">Pimlico</span>
+				</label>
+			</div>
+		</div>
+
 		<!-- Wallet Connection Section -->
 		<div>
 			<div>
@@ -223,7 +262,7 @@ async function onClickIncrement() {
 				</button>
 			</div>
 
-			<div>name: {{ wallet.providerInfo?.name }}</div>
+			<div>wallet: {{ wallet.providerInfo?.name }}</div>
 			<div>status: {{ wallet.status }}</div>
 			<div v-if="wallet.error">error: {{ getErrorMessage(wallet.error) }}</div>
 

@@ -47,6 +47,7 @@ jobs:
               run: pnpm build
               env:
                   VITE_CANDIDE_API_KEY: ${{ secrets.VITE_CANDIDE_API_KEY }}
+                  VITE_PIMLICO_API_KEY: ${{ secrets.VITE_PIMLICO_API_KEY }}
 
             # Workaround for 404 error with vue-router: https://stackoverflow.com/a/65539760/10752354
             - name: Copy index.html to 404.html
