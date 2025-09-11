@@ -262,8 +262,7 @@ async function onClickSwitchChain() {
 		</div>
 
 		<div>status: {{ wallet.status }}</div>
-		<div>isConnected: {{ isConnected }}</div>
-		<div>error: {{ wallet.error instanceof Error ? wallet.error.message : wallet.error }}</div>
+		<div v-if="wallet.error">error: {{ getErrorMessage(wallet.error) }}</div>
 
 		<div v-if="isConnected">
 			<div>chainId: {{ wallet.chainId }}</div>
