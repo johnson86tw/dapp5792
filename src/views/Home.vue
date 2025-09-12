@@ -16,7 +16,7 @@ const { selectedNetwork } = useBlockchain()
 
 // Paymaster selection state
 type PaymasterType = 'candide' | 'pimlico'
-const selectedPaymaster = ref<PaymasterType>('pimlico')
+const selectedPaymaster = ref<PaymasterType>('candide')
 
 // Paymaster configuration
 const paymasterConfig = computed(() => {
